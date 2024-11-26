@@ -63,14 +63,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_CIRC, KC_AMPR, KC_ASTR, KC_PIPE, CK_AROW, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_EXLM, KC_PLUS, KC_LPRN, KC_RPRN, KC_EQL,  KC_TRNS,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TILD, KC_MINS, KC_LABK, KC_RABK, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TILD, KC_MINS, KC_LABK, KC_RABK, KC_BSLS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, C(KC_SPC),KC_TRNS, KC_TRNS, CW_TOGG, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
     [SYM2] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS, CK_DARW, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_DLR,  KC_HASH, KC_LBRC, KC_RBRC, KC_COLN, KC_DQUO,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_GRV,  KC_AT,   KC_LCBR, KC_RCBR, KC_TRNS, KC_TRNS,
+        KC_TRNS, KC_DEL,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_GRV,  KC_AT,   KC_LCBR, KC_RCBR, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
     [NUM] = LAYOUT(
@@ -90,17 +90,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
+    static uint16_t before_keycode = 0;
+
+    bool ret = true;
+    switch (keycode) {
     case CK_AROW:
         if (record->event.pressed) {
-          send_string("->");
+            send_string("->");
         }
-        return false;
+        ret = false;
+        break;
     case CK_DARW:
         if (record->event.pressed) {
           send_string("=>");
         }
-        return false;
+        ret = false;
+        break;
     case MO(SYM2):
         if (record->event.pressed) {
             register_code(KC_LSFT);
@@ -108,7 +113,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         else {
             unregister_code(KC_LSFT);
         }
-        return true;
+        break;
     case KC_LBRC:
     case KC_RBRC:
         if (record->event.pressed) {
@@ -116,22 +121,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LSFT);
             }
         }
-        return true;
+        break;
     case KC_DEL:
         if (record->event.pressed) {
             if (get_mods() & MOD_MASK_SHIFT) {
                 unregister_code(KC_LSFT);
             }
         }
-        return true;
+        break;
     case C(KC_HOME):
         if (record->event.pressed) {
             tap_code(KC_END);
         }
-        return false;
+        ret = false;
+        break;
+    case KC_TILD:
+        if (record->event.pressed) {
+            if (before_keycode == KC_BSLS) {
+                tap_code(KC_N);
+                ret = false;
+            }
+        }
+        break;
     default:
-        return true;
-  }
+        break;
+    }
+
+    before_keycode = keycode;
+
+    return ret;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
