@@ -1,3 +1,11 @@
 #pragma once
 
 #define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+
+
+#define RGB_MATRIX_TIMEOUT (1 * 1000 * 60) // 10 min
+
+#ifdef RGB_MATRIX_DEFAULT_VAL
+#undef RGB_MATRIX_DEFAULT_VAL
+#define RGB_MATRIX_DEFAULT_VAL 100
+#endif
