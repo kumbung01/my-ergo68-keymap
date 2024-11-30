@@ -27,10 +27,10 @@ typedef uint32_t u32;
 enum LAYER{
     CODE,
     GAME,
-    SYM1,
-    SYM2,
     NUM,
     NAV,
+    SYM1,
+    SYM2,
 };
 
 enum custom_keycodes {
