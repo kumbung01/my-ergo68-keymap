@@ -123,12 +123,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case KC_LBRC:
     case KC_RBRC:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_code(KC_LSFT);
-            }
-        }
-        break;
+    case KC_GRV:
     case KC_DEL:
         if (record->event.pressed) {
             if (get_mods() & MOD_MASK_SHIFT) {

@@ -5,3 +5,4 @@ COMMAND_ENABLE = no
 RGB_MATRIX_ENABLE = yes
 COMBO_ENABLE = yes
 IGNORE_SIZE = yes
+DEBOUNCE_TYPE = asym_eager_defer_pk
