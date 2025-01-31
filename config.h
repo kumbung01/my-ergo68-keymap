@@ -5,6 +5,7 @@
 
 #define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
 
+#define COMBO_TERM_PER_COMBO
 
 #define RGB_MATRIX_TIMEOUT (1 * 1000 * 60) // 10 min
 
