@@ -16,6 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include "process_combo.h"
+#include "caps_word.h"
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -101,6 +102,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     bool ret = true;
     switch (keycode) {
+    case KC_RALT:
+        if (record->event.pressed && is_caps_word_on()) {
+            caps_word_off();
+        }
+        break;
     case CK_AROW:
         if (record->event.pressed) {
             send_string("->");
