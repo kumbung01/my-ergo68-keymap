@@ -209,6 +209,6 @@ void keyboard_post_init_user(void) {
 #ifdef COMBO_TERM_PER_COMBO
 uint16_t get_combo_term(u16 combo_index, combo_t* combo)
 {
-    return 100;
+    return 120;
 }
 #endif
